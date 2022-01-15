@@ -12,12 +12,7 @@ function Home({ providers }) {
   return (
     <div className="space-y-10 relative">
       <Head>
-        <title>LinkedIn</title>
-        <meta name="description" content="Linkedin Clone" />
-        <link
-          rel="icon"
-          href="https://static-exp1.licdn.com/sc/h/al2o9zrvru7aqj8e1x2rzsrca"
-        />
+        <title>LinkedIn | Home</title>
       </Head>
       <header className="flex justify-around items-center py-4">
         <div className="relative w-36 h-10">
