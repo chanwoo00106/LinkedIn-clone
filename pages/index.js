@@ -11,7 +11,7 @@ export default function Home() {
           href="https://static-exp1.licdn.com/sc/h/al2o9zrvru7aqj8e1x2rzsrca"
         />
       </Head>
-      Linkedin Clone
+      <h1>Linkedin Clone</h1>
     </div>
   );
 }
