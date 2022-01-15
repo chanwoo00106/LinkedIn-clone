@@ -1,5 +1,4 @@
 function HeaderLink({ Icon, text, avatar, feed }) {
-  console.log(text, feed);
   return (
     <div
       className={`cursor-pointer flex flex-col justify-center items-center ${
