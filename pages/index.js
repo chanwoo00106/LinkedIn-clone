@@ -1,10 +1,19 @@
+import { AnimatePresence } from "framer-motion";
 import { getSession } from "next-auth/react";
 import Head from "next/head";
 import Feed from "../components/Feed";
 import Header from "../components/Header";
 import Sidebar from "../components/Sidebar";
+import Modal from "../components/Modal";
+import { useRecoilState } from "recoil";
+import { modalState, modalTypeState } from "../atoms/modelAtom";
 
 export default function Home() {
+  const [modalOpen, setModalOpen] = useRecoilState(modalState);
+  const [modalType, setModalType] = useRecoilState(modalTypeState);
+
+  console.log(modalOpen);
+
   return (
     <div className="bg-[#f3f2ef] dark:bg-black dark:text-white h-screen overflow-y-scroll md:space-y-6">
       <Head>
@@ -16,6 +25,12 @@ export default function Home() {
           <Sidebar />
           <Feed />
         </div>
+
+        <AnimatePresence>
+          {modalOpen && (
+            <Modal handleClose={() => setModalOpen(false)} type={modalType} />
+          )}
+        </AnimatePresence>
       </main>
     </div>
   );
