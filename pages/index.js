@@ -12,8 +12,6 @@ export default function Home() {
   const [modalOpen, setModalOpen] = useRecoilState(modalState);
   const [modalType, setModalType] = useRecoilState(modalTypeState);
 
-  console.log(modalOpen);
-
   return (
     <div className="bg-[#f3f2ef] dark:bg-black dark:text-white h-screen overflow-y-scroll md:space-y-6">
       <Head>

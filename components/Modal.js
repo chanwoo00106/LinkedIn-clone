@@ -55,7 +55,6 @@ const gifYouUp = {
 
 const Modal = ({ handleClose, type }) => {
   const { data: session } = useSession();
-  console.log(type);
 
   return (
     <Backdrop onClick={handleClose}>
