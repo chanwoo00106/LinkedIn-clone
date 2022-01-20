@@ -1,4 +1,5 @@
 import { FiberManualRecordRounded, InfoRounded } from "@mui/icons-material";
+import Image from "next/image";
 import TimeAgo from "timeago-react";
 
 function News({ news }) {
@@ -29,6 +30,12 @@ function News({ news }) {
           ))}
         </div>
       </div>
+      <Image
+        src="https://bit.ly/32hE65v"
+        alt="advertisement"
+        width={400}
+        height={400}
+      />
     </div>
   );
 }
