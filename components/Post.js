@@ -1,16 +1,32 @@
-import { CloseRounded, MoreHorizRounded } from "@mui/icons-material";
+import {
+  CloseRounded,
+  CommentOutlined,
+  DeleteRounded,
+  MoreHorizRounded,
+  ReplyAllRounded,
+  ThumbUpOffAltOutlined,
+  ThumbUpOffAltRounded,
+} from "@mui/icons-material";
 import { Avatar, IconButton } from "@mui/material";
+import { useSession } from "next-auth/react";
 import { useState } from "react";
 import { useRecoilState } from "recoil";
-import { modalState } from "../atoms/modelAtom";
+import { modalState, modalTypeState } from "../atoms/modelAtom";
+import { getPostState } from "../atoms/postAtom";
 
 /* eslint-disable @next/next/no-img-element */
 function Post({ post, modalPost }) {
   const [modalOpen, setModalOpen] = useRecoilState(modalState);
+  const [modalType, setModalType] = useRecoilState(modalTypeState);
+  const [postState, setPostState] = useRecoilState(getPostState);
   const [showInput, setShowInput] = useState(false);
+  const [liked, setLiked] = useState(false);
+  const { data: session } = useSession();
 
   const truncate = (string, n) =>
     string?.length > n ? string.substr(0, n - 1) + " ...see more" : string;
+
+  const deletePost = () => {};
 
   return (
     <div
@@ -48,6 +64,51 @@ function Post({ post, modalPost }) {
           )}
         </div>
       )}
+
+      {post.photoUrl && !modalPost && (
+        <img
+          src={post.photoUrl}
+          alt="photo"
+          className="w-full cursor-pointer"
+          onClick={() => {
+            setModalOpen(true);
+            setModalType("gifYouUp");
+            setPostState(post);
+          }}
+        />
+      )}
+
+      <div className="flex justify-evenly items-center dark:border-t border-gray-600/80 mx2.5 pt-2 text-black/60 dark:text-white/75">
+        {modalPost ? (
+          <button className="postButton">
+            <CommentOutlined /> <h4>Comment</h4>
+          </button>
+        ) : (
+          <button
+            className={`postButton ${liked && "text-blue-500"}`}
+            onClick={() => setLiked(!liked)}
+          >
+            {liked ? (
+              <ThumbUpOffAltRounded className="-scale-x-100" />
+            ) : (
+              <ThumbUpOffAltOutlined className="-scale-x-100" />
+            )}
+            <h4>Like</h4>
+          </button>
+        )}
+
+        {session?.user?.email === post.email ? (
+          <button className="postButton focus:text-red-400">
+            <DeleteRounded onClick={deletePost} />
+            <h4>Delete post</h4>
+          </button>
+        ) : (
+          <button className="postButton">
+            <ReplyAllRounded className="-scale-x-100" />
+            <h4>Share</h4>
+          </button>
+        )}
+      </div>
     </div>
   );
 }
