@@ -8,8 +8,9 @@ import Modal from "../components/Modal";
 import { useRecoilState } from "recoil";
 import { modalState, modalTypeState } from "../atoms/modelAtom";
 import { connectToDatabase } from "../util/mongodb";
+import News from "../components/News";
 
-export default function Home({ posts }) {
+export default function Home({ posts, news }) {
   const [modalOpen, setModalOpen] = useRecoilState(modalState);
   const [modalType, setModalType] = useRecoilState(modalTypeState);
 
@@ -24,6 +25,7 @@ export default function Home({ posts }) {
           <Sidebar />
           <Feed posts={posts} />
         </div>
+        <News news={news} />
 
         <AnimatePresence>
           {modalOpen && (
@@ -51,8 +53,13 @@ export async function getServerSideProps(context) {
     .sort({ timestamp: -1 })
     .toArray();
 
+  const news = await fetch(
+    `https://newsapi.org/v2/top-headlines?country=kr&apiKey=${process.env.NEWS_API}`
+  ).then((res) => res.json());
+
   return {
     props: {
+      news: news.articles,
       session,
       posts: posts.map((post) => ({
         _id: post._id.toString(),
