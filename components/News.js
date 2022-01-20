@@ -30,12 +30,20 @@ function News({ news }) {
           ))}
         </div>
       </div>
-      <Image
-        src="https://bit.ly/32hE65v"
-        alt="advertisement"
-        width={400}
-        height={400}
-      />
+      <div className="bg-white dark:bg-[#1d222b] w-11/12 h-64 px-2.5 rounded-lg sticky top-20 border border-gray-300 dark:border-none">
+        <div className="relative w-full h-full">
+          <Image
+            src="https://bit.ly/32hE65v"
+            alt="advertisement"
+            layout="fill"
+            objectFit="contain"
+            priority
+          />
+          <h1 className="absolute bottom-0 w-full text-center font-bold dark:text-white text-2xl">
+            모두 티모하세요!
+          </h1>
+        </div>
+      </div>
     </div>
   );
 }
