@@ -12,13 +12,15 @@ import { useSession } from "next-auth/react";
 import { useState } from "react";
 import { useRecoilState } from "recoil";
 import { modalState, modalTypeState } from "../atoms/modelAtom";
-import { getPostState } from "../atoms/postAtom";
+import { getPostState, handlePostState } from "../atoms/postAtom";
+import TimeAgo from "timeago-react";
 
 /* eslint-disable @next/next/no-img-element */
 function Post({ post, modalPost }) {
   const [modalOpen, setModalOpen] = useRecoilState(modalState);
   const [modalType, setModalType] = useRecoilState(modalTypeState);
   const [postState, setPostState] = useRecoilState(getPostState);
+  const [handlePost, setHandlePost] = useRecoilState(handlePostState);
   const [showInput, setShowInput] = useState(false);
   const [liked, setLiked] = useState(false);
   const { data: session } = useSession();
@@ -26,7 +28,14 @@ function Post({ post, modalPost }) {
   const truncate = (string, n) =>
     string?.length > n ? string.substr(0, n - 1) + " ...see more" : string;
 
-  const deletePost = () => {};
+  const deletePost = async () => {
+    const res = await fetch(`/api/posts/${post._id}`, {
+      method: "DELETE",
+      headers: { "Content-Type": "application/json" },
+    });
+    setHandlePost(true);
+    setModalOpen(false);
+  };
 
   return (
     <div
@@ -41,6 +50,10 @@ function Post({ post, modalPost }) {
             {post.username}
           </h6>
           <p className="text-sm dark:text-white//75 opacity-80">{post.email}</p>
+          <TimeAgo
+            datetime={post.createdAt}
+            className="text-xs dark:text-white/75 opacity-80"
+          />
         </div>
         {modalPost ? (
           <IconButton onClick={() => setModalOpen(false)}>
