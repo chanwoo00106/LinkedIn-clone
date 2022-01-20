@@ -2,11 +2,13 @@ import { useState } from "react";
 import { useSession } from "next-auth/react";
 import { useRecoilState } from "recoil";
 import { modalState } from "../atoms/modelAtom";
+import { handlePostState } from "../atoms/postAtom";
 
 function Form() {
   const [input, setInput] = useState("");
   const [photoUrl, setPhotoUrl] = useState("");
   const { data: session } = useSession();
+  const [handlePost, setHandlePost] = useRecoilState(handlePostState);
   const [modalOpen, setModalOpen] = useRecoilState(modalState);
 
   const uploadPost = async (e) => {
@@ -16,7 +18,10 @@ function Form() {
       body: JSON.stringify({
         input,
         photoUrl,
-        ...session.user,
+        username: session.user.name,
+        email: session.user.email,
+        userImg: session.user.image,
+        createdAt: new Date().toString(),
       }),
       headers: {
         "Content-type": "application/json",
@@ -24,8 +29,8 @@ function Form() {
     });
 
     const data = await res.json();
-    console.log(data);
 
+    setHandlePost(true);
     setModalOpen(false);
   };
 

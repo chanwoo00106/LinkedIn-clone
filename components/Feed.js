@@ -1,16 +1,19 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable @next/next/no-img-element */
 import { useEffect, useState } from "react";
 import { useRecoilState } from "recoil";
 import Input from "./Input";
 import { handlePostState, useSSRPostsState } from "../atoms/postAtom";
+import Post from "./Post";
 
-function Feed() {
-  const [realTimePosts, setRealTimePosts] = useState();
+function Feed({ posts }) {
+  const [realTimePosts, setRealTimePosts] = useState([]);
   const [handlePost, setHandlePost] = useRecoilState(handlePostState);
   const [useSSRPosts, setUseSSRPosts] = useRecoilState(useSSRPostsState);
 
   useEffect(() => {
     const fetchPosts = async () => {
+      await setTimeout(() => {}, 500);
       const res = await fetch("/api/posts", {
         method: "GET",
         headers: {
@@ -25,17 +28,13 @@ function Feed() {
     };
     fetchPosts();
   }, [handlePost]);
-  console.log(realTimePosts);
 
   return (
     <div className="space-y-6 pb-24 max-w-lg">
       <Input />
-      {realTimePosts.map((post) => (
-        <div key={post._id}>
-          <h4>{post.input}</h4>
-          <img src={post.photoUrl} alt="postImage" />
-        </div>
-      ))}
+      {!useSSRPosts
+        ? realTimePosts.map((post) => <Post key={post._id} post={post} />)
+        : posts.map((post) => <Post key={post._id} post={post} />)}
     </div>
   );
 }
